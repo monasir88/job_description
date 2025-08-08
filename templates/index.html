@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Job Posting Assistant</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; }
+        #chatbox { width: 500px; margin: 50px auto; background: white; padding: 20px; border-radius: 10px; }
+        #messages { height: 400px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px; background: #fafafa; }
+        .user { color: blue; margin: 5px 0; }
+        .bot { color: black; margin: 5px 0; }
+        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        button.copy-btn { margin-top: 10px; padding: 8px 12px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button.copy-btn:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <div id="chatbox">
+        <div id="messages"></div>
+        <input type="text" id="message" placeholder="Type your answer and press Enter..." autofocus>
+        <button class="copy-btn" id="copyBtn" style="display:none;">Copy Job Ad</button>
+    </div>
+
+    <script>
+        const userId = Date.now(); // unique session ID
+        const messagesDiv = document.getElementById("messages");
+        const input = document.getElementById("message");
+        const copyBtn = document.getElementById("copyBtn");
+        let lastBotMessage = "";
+
+        function addMessage(text, sender) {
+            const div = document.createElement("div");
+            div.className = sender;
+            if (sender === "bot") {
+                div.innerHTML = text; // render HTML for bot
+                lastBotMessage = text;
+            } else {
+                div.textContent = text;
+            }
+            messagesDiv.appendChild(div);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        input.addEventListener("keypress", function(e) {
+            if (e.key === "Enter" && input.value.trim() !== "") {
+                const msg = input.value;
+                addMessage(msg, "user");
+                input.value = "";
+
+                fetch("/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: `message=${encodeURIComponent(msg)}&user_id=${userId}`
+                })
+                .then(res => res.json())
+                .then(data => {
+                    addMessage(data.reply, "bot");
+                    if (data.done) {
+                        copyBtn.style.display = "inline-block"; // show copy button
+                    }
+                });
+            }
+        });
+
+        copyBtn.addEventListener("click", function() {
+            navigator.clipboard.writeText(lastBotMessage.replace(/<[^>]*>/g, '')); // copy plain text
+            alert("Job ad copied to clipboard!");
+        });
+
+        // Start conversation automatically
+        fetch("/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `message=&user_id=${userId}`
+        })
+        .then(res => res.json())
+        .then(data => {
+            addMessage(data.reply, "bot");
+        });
+    </script>
+</body>
+</html>
