@@ -12,11 +12,11 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 app = Flask(__name__)
 
 questions = [
-    "1. What title or role are you looking for?",
-    "2. What tasks will the person have to solve?",
-    "3. Will the work be done at your location, remotely, or a mix?",
-    "4. Approximately how many hours per week – and for how long?",
-    "5. Do you have any other wishes or requirements for the person's background and skills?"
+    "1. Hvilken titel eller rolle søger du?",
+    "2. Hvilke opgaver skal personen løse?",
+    "3. Skal arbejdet udføres hos jer, remote, eller et mix?",
+    "4. Ca. hvor mange timer om ugen – og i hvor lang en periode?",
+    "5. Har du ellers nogle ønsker eller krav til personens baggrund og kompetencer?"
 ]
 
 sessions = {}
@@ -50,62 +50,65 @@ def chat():
     del sessions[user_id]
     return jsonify({"reply": job_posting, "done": True})
 
-
 def generate_job_posting(answers):
     prompt = f"""
-You are a specialist in writing job postings for freelance and temp positions within marketing, communication, design and digital roles.
-You always use the 3rd person (not “you”), avoid buzzwords and generic phrases, and follow the provided structure exactly.
+Du er en specialist i at skrive stillingsopslag til freelance- og vikarstillinger inden for marketing, kommunikation, design og digitale roller.
+Du skriver annoncer, som følger en fast struktur med tydelige afsnit og professionel tone. 
+Du bruger altid 3. person (ikke “du”), og undgår buzzwords og generiske vendinger.
+Brug altid ordet "personen" om kandidaten – ikke konsulent/konsulenten osv.
+Virksomheden nævnes ikke med navn, men med branche.
+Der er kun 2 sæt bullets i opslaget.
 
-OUTPUT FORMAT: Return the ad as valid HTML with proper tags for:
-- Bold text using <b>
-- Bulleted lists using <ul> and <li>
-- Paragraphs using <p>
-- Headings using <h2>
+OUTPUT FORMAT: Returnér annoncen som gyldig HTML uden ekstra kodeblokke. Brug:
+- <b> til fed tekst
+- <ul> og <li> til punktopstillinger
+- <p> til afsnit
+- <h2> til overskrifter
 
-Here is the ad structure to follow:
+Følg denne præcise struktur:
 
-<h2><b>[Heading: affiliation (freelance, temporary or both), title, type of company, city/area]</b></h2>
-<p>[Introduction: What is being sought. For what type of company. Location. Collaboration type (remote, on location, or a mix)]</p>
+<h2><b>[Tilknyningsform (freelance, vikar eller begge), titel, type virksomhed, by/område]</b></h2>
+<p>[Indledning: Hvad der søges. Til hvilken type virksomhed. Beliggenhed. Samarbejdsform (remote, på lokation, eller et mix)]</p>
 <ul>
-    <li><b>Scope:</b> [Days or hours per week or month]</li>
-    <li><b>Start:</b> [Start date or approx. start]</li>
-    <li><b>Period:</b> [Period, how long will the collaboration last?]</li>
+    <li><b>Omfang:</b> [Dage eller timer per uge eller måned]</li>
+    <li><b>Opstart:</b> [Opstartsdato eller ca. opstart]</li>
+    <li><b>Periode:</b> [Periode, hvor længe varer samarbejdet?]</li>
 </ul>
-<p>[Section 1: Describe the tasks that the person will be required to solve, as well as the role]</p>
-<p>[Section 2: Describe the background the person should have, experience, industry background, skills]</p>
-<p><b>Competencies/work areas:</b></p>
+<p>[Afsnit 1: Opgaver som personen skal løse, samt evt. rollen]</p>
+<p>[Afsnit 2: Baggrund og kompetencer personen gerne skal have, erfaring, branchebaggrund]</p>
+<p><b>Kompetencer/arbejdsområder:</b></p>
 <ul>
-    <li>[Bullet 1: Key task or skill]</li>
-    <li>[Bullet 2: Key task or skill]</li>
-    <li>[Bullet 3: Key task or skill]</li>
-    <li>[Bullet 4: Key task or skill]</li>
+    <li>[Vigtig opgave eller kompetence]</li>
+    <li>[Vigtig opgave eller kompetence]</li>
 </ul>
-<p>[Section 3: Any other conditions or skills that are a plus but not a requirement]</p>
-<p>Please apply if you meet the criteria and are interested.</p>
-<p>Best regards<br>Carsten Bjerregaard</p>
+<p>[Afsnit 3: Øvrige forhold eller kompetencer som er et plus men ikke et krav]</p>
+<p>Søg gerne hvis du opfylder kriterierne og er interesseret.</p>
+<p>Bedste hilsener<br>Carsten Bjerregaard</p>
 
-Use the answers below to fill in this structure:
+Her er oplysningerne fra brugeren:
 
-1. Title/Role: {answers[0]}
-2. Tasks: {answers[1]}
-3. Location/Collaboration: {answers[2]}
-4. Hours & Period: {answers[3]}
-5. Background/Requirements: {answers[4]}
+1. Titel/rolle: {answers[0]}
+2. Opgaver: {answers[1]}
+3. Lokation/samarbejdsform: {answers[2]}
+4. Timer & periode: {answers[3]}
+5. Baggrund/krav: {answers[4]}
 
-Important:
-- Do NOT wrap the output in ```html``` or any other code block formatting.
-- Return only clean HTML so it can be displayed directly on a webpage without extra processing.
+Vigtige krav:
+- Brug kun de oplysninger, brugeren har givet.
+- Opfind aldrig detaljer.
+- Hold dig til strukturen.
+- Radbryt INTE utdata i ```html``` eller någon annan kodblocksformatering.
+- Returnera endast ren HTML så att den kan visas direkt på en webbsida utan extra bearbetning.
 """
 
     response = client.chat.completions.create(
         model="gpt-4o",
-        messages=[
-            {"role": "user", "content": prompt}
-        ],
+        messages=[{"role": "user", "content": prompt}],
         temperature=0.7
     )
 
     return response.choices[0].message.content.strip()
+
 
 
 if __name__ == "__main__":
