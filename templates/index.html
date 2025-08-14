@@ -39,7 +39,7 @@
                 addMessage(msg, "user");
                 input.value = "";
 
-                fetch("/chat", {
+                fetch("https://job-description-e65g.onrender.com/chat", {
                     method: "POST",
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
                     body: `message=${encodeURIComponent(msg)}&user_id=${userId}`
