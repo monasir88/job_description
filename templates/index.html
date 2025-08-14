@@ -54,9 +54,9 @@
                 .then(data => {
                     addMessage(data.reply, "bot");
 
-                    // If job ad is ready, also show it outside chat
-                    if (data.done) {
-                        jobOutputDiv.innerHTML = data.reply;
+                    // Only show final job ad outside chat, not reply text
+                    if (data.done && data.job_html) {
+                        jobOutputDiv.innerHTML = data.job_html;
                     }
                 });
             }
