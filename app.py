@@ -3,10 +3,10 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 
-# Load .env file variables
+# Load environment variables from .env file
 load_dotenv()
 
-# Initialize OpenAI client using API key from environment variable
+# Initialize OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 app = Flask(__name__)
@@ -35,17 +35,17 @@ def chat():
 
     session_data = sessions[user_id]
 
-    # Save previous answer
+    # Store answer if not first question
     if session_data["q_index"] > 0:
         session_data["answers"].append(user_input)
 
-    # Ask next question
+    # Still have questions left
     if session_data["q_index"] < len(questions):
         question = questions[session_data["q_index"]]
         session_data["q_index"] += 1
         return jsonify({"reply": question, "done": False})
 
-    # All answers collected → Generate ad
+    # All questions answered → Generate job ad
     job_posting = generate_job_posting(session_data["answers"])
     del sessions[user_id]
     return jsonify({"reply": job_posting, "done": True})
@@ -97,19 +97,14 @@ Vigtige krav:
 - Brug kun de oplysninger, brugeren har givet.
 - Opfind aldrig detaljer.
 - Hold dig til strukturen.
-- Radbryt INTE utdata i ```html``` eller någon annan kodblocksformatering.
-- Returnera endast ren HTML så att den kan visas direkt på en webbsida utan extra bearbetning.
+- Returnér kun ren HTML som kan indsættes direkte på en webside.
 """
-
     response = client.chat.completions.create(
         model="gpt-4o",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.7
     )
-
     return response.choices[0].message.content.strip()
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
