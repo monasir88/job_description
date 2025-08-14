@@ -46,11 +46,11 @@ def chat():
         return jsonify({"reply": question, "done": False})
 
     # All questions answered → Generate job ad
-    job_posting_html = generate_job_posting(session_data["answers"])
+    job_posting = generate_job_posting(session_data["answers"])
     del sessions[user_id]
-
-    # Only send HTML to be rendered outside chat
-    return jsonify({"reply": "", "done": True, "job_html": job_posting_html})
+    return jsonify({"reply": "", 
+                "job_html": job_posting, 
+                "done": True})
 
 def generate_job_posting(answers):
     prompt = f"""
