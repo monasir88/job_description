@@ -56,7 +56,7 @@
 
                     // If job ad is ready, also show it outside chat
                     if (data.done) {
-                        jobOutputDiv.textContent = data.reply;
+                        jobOutputDiv.innerHTML = data.reply;
                     }
                 });
             }
