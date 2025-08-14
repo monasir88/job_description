@@ -21,7 +21,7 @@
     </div>
 
     <script>
-        const userId = Date.now(); // unique session ID
+        const userId = Date.now();
         const messagesDiv = document.getElementById("messages");
         const input = document.getElementById("message");
         const copyBtn = document.getElementById("copyBtn");
@@ -31,7 +31,7 @@
             const div = document.createElement("div");
             div.className = sender;
             if (sender === "bot") {
-                div.innerHTML = text; // render HTML for bot
+                div.innerHTML = text;
                 lastBotMessage = text;
             } else {
                 div.textContent = text;
@@ -55,14 +55,14 @@
                 .then(data => {
                     addMessage(data.reply, "bot");
                     if (data.done) {
-                        copyBtn.style.display = "inline-block"; // show copy button
+                        copyBtn.style.display = "inline-block";
                     }
                 });
             }
         });
 
         copyBtn.addEventListener("click", function() {
-            navigator.clipboard.writeText(lastBotMessage.replace(/<[^>]*>/g, '')); // copy plain text
+            navigator.clipboard.writeText(lastBotMessage.replace(/<[^>]*>/g, ''));
             alert("Job ad copied to clipboard!");
         });
 
