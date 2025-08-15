@@ -2,3 +2,5 @@ flask
 gunicorn
 openai
 python-dotenv
+flask
+flask-cors
