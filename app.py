@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
-
+from flask_cors import CORS
 # Load environment variables from .env file
 load_dotenv()
 
@@ -10,7 +10,7 @@ load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 app = Flask(__name__)
-
+CORS(app)
 questions = [
     "1. Hvilken titel eller rolle søger du?",
     "2. Hvilke opgaver skal personen løse?",
