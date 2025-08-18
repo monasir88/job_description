@@ -12,11 +12,11 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 app = Flask(__name__)
 CORS(app)
 questions = [
-    "1. Hvilken titel eller rolle søger du?<span>F.eks.: Marketingkoordinator, Tekstforfatter, Designer eller SoMe-specialist. Hvis du er i tvivl, kan du bare beskrive funktionen.</span>",
-    "2. Hvilke opgaver skal personen løse?<span>F.eks.: Kampagneprojektledelse, E-mail marketing, Digital annoncering, Udarbejdelse af Content, LinkedIn marketing, Webanalyse, Websiteopdatering, Design, Marketingplanlægning etc.</span>",
-    "3. Skal arbejdet udføres hos jer, remote, eller et mix?<span>Angiv om arbejdet skal udføres på jeres kontor, hjemmefra/remote – eller en kombination.</span>",
-    "4. Hvor mange timer skal personen typisk sætte af pr. uge eller måned – og i hvor lang en periode?<span>Skriv et cirka timeforbrug pr. uge og hvor længe opgaven forventes at vare – f.eks.: 15-20 timer i 3 måneder.</span>",
-    "5. Har du ellers nogle ønsker eller krav til personens baggrund og kompetencer?<span>Her kan du tilføje særlige krav eller ønsker – fx brancheerfaring, eller kendskab til bestemte værktøjer eller andet.</span>"
+    "1. Hvilken titel eller rolle søger du?</br><span>F.eks.: Marketingkoordinator, Tekstforfatter, Designer eller SoMe-specialist. Hvis du er i tvivl, kan du bare beskrive funktionen.</span>",
+    "2. Hvilke opgaver skal personen løse?</br><span>F.eks.: Kampagneprojektledelse, E-mail marketing, Digital annoncering, Udarbejdelse af Content, LinkedIn marketing, Webanalyse, Websiteopdatering, Design, Marketingplanlægning etc.</span>",
+    "3. Skal arbejdet udføres hos jer, remote, eller et mix?</br><span>Angiv om arbejdet skal udføres på jeres kontor, hjemmefra/remote – eller en kombination.</span>",
+    "4. Hvor mange timer skal personen typisk sætte af pr. uge eller måned – og i hvor lang en periode?</br><span>Skriv et cirka timeforbrug pr. uge og hvor længe opgaven forventes at vare – f.eks.: 15-20 timer i 3 måneder.</span>",
+    "5. Har du ellers nogle ønsker eller krav til personens baggrund og kompetencer?</br><span>Her kan du tilføje særlige krav eller ønsker – fx brancheerfaring, eller kendskab til bestemte værktøjer eller andet.</span>"
 ]
 
 sessions = {}
