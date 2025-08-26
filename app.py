@@ -49,7 +49,7 @@ def chat():
     job_posting = generate_job_posting(session_data["answers"])
     del sessions[user_id]
     return jsonify({
-        "reply": "",
+        "reply": "Tak for dine svar! Dit jobopslag er nu genereret herunder",
         "job_html": job_posting,
         "done": True
     })
