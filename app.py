@@ -87,7 +87,7 @@ Følg denne præcise struktur:
 </ul>
 <p>[Afsnit 3: Øvrige forhold eller kompetencer som er et plus men ikke et krav]</p>
 <p>Søg gerne hvis du opfylder kriterierne og er interesseret.</p>
-<p>Bedste hilsener<br>Carsten Bjerregaard</p>
+<p>Bedste hilsener<br>Dit navn</p>
 
 Her er oplysningerne fra brugeren:
 
